@@ -3,11 +3,6 @@ variable "subscription_id" {
   type        = string
 }
 
-variable "tenant_id" {
-  description = "Azure tenant ID used by the GitHub OIDC managed identity."
-  type        = string
-}
-
 variable "resource_group_name" {
   description = "Resource group that stores CI/CD identity resources."
   type        = string
@@ -16,7 +11,6 @@ variable "resource_group_name" {
 variable "location" {
   description = "Azure region for CI/CD identity resources."
   type        = string
-  default     = "eastus"
 }
 
 variable "github_org" {
@@ -30,26 +24,13 @@ variable "github_repo" {
 }
 
 variable "federated_subjects" {
-  description = "GitHub OIDC subjects that can exchange tokens for this identity."
+  description = "GitHub OIDC subjects that can exchange tokens for this identity. Use ORG/REPO placeholder if desired."
   type        = list(string)
-  default = [
-    "repo:ORG/REPO:ref:refs/heads/main",
-    "repo:ORG/REPO:pull_request"
-  ]
 }
 
 variable "managed_identity_name" {
   description = "User-assigned managed identity name for GitHub Actions."
   type        = string
-  default     = "mi-github-terraform"
-}
-
-variable "tags" {
-  description = "Tags applied to identity resources."
-  type        = map(string)
-  default = {
-    workload = "github-cicd"
-  }
 }
 
 variable "terraform_state_storage_account_id" {
@@ -65,4 +46,10 @@ variable "additional_role_assignments" {
     role_definition_name = string
   }))
   default = []
+}
+
+variable "tags" {
+  description = "Tags applied to identity resources."
+  type        = map(string)
+  default     = {}
 }

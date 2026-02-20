@@ -1,5 +1,3 @@
-data "azurerm_client_config" "current" {}
-
 locals {
   repository        = "${var.github_org}/${var.github_repo}"
   federated_subject = [for subject in var.federated_subjects : replace(subject, "ORG/REPO", local.repository)]
@@ -52,7 +50,7 @@ resource "azurerm_federated_identity_credential" "github" {
 resource "azurerm_role_assignment" "github" {
   for_each = {
     for idx, assignment in local.all_role_assignments :
-    "${idx}-${assignment.role_definition_name}" => assignment
+    "${idx}-${assignment.scope}-${assignment.role_definition_name}" => assignment
   }
 
   scope                = each.value.scope
