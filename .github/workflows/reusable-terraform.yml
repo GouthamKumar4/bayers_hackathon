@@ -1,0 +1,72 @@
+name: reusable-terraform
+
+on:
+  workflow_call:
+    inputs:
+      tf_working_dir:
+        description: Terraform working directory
+        required: true
+        type: string
+      environment:
+        description: GitHub Environment name (can enforce required reviewers)
+        required: true
+        type: string
+      terraform_version:
+        description: Terraform version
+        required: false
+        default: "1.7.5"
+        type: string
+      plan_only:
+        description: Run plan only (no apply)
+        required: false
+        default: true
+        type: boolean
+    secrets:
+      azure_client_id:
+        required: true
+      azure_tenant_id:
+        required: true
+      azure_subscription_id:
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      TF_IN_AUTOMATION: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform_version }}
+
+      - name: Azure login (OIDC + Managed Identity)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.azure_client_id }}
+          tenant-id: ${{ secrets.azure_tenant_id }}
+          subscription-id: ${{ secrets.azure_subscription_id }}
+
+      - name: Terraform fmt
+        run: terraform -chdir=${{ inputs.tf_working_dir }} fmt -check -recursive
+
+      - name: Terraform init
+        run: terraform -chdir=${{ inputs.tf_working_dir }} init
+
+      - name: Terraform validate
+        run: terraform -chdir=${{ inputs.tf_working_dir }} validate
+
+      - name: Terraform plan
+        run: terraform -chdir=${{ inputs.tf_working_dir }} plan -input=false -out=tfplan
+
+      - name: Terraform apply
+        if: ${{ !inputs.plan_only }}
+        run: terraform -chdir=${{ inputs.tf_working_dir }} apply -input=false -auto-approve tfplan

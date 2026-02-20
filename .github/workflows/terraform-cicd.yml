@@ -1,0 +1,40 @@
+name: terraform-cicd
+
+on:
+  pull_request:
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform-cicd.yml"
+      - ".github/workflows/reusable-terraform.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform-cicd.yml"
+      - ".github/workflows/reusable-terraform.yml"
+
+jobs:
+  pr-plan-dev:
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/reusable-terraform.yml
+    with:
+      tf_working_dir: terraform/environments/dev/cicd
+      environment: dev
+      plan_only: true
+    secrets:
+      azure_client_id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+      azure_tenant_id: ${{ secrets.AZURE_TENANT_ID_DEV }}
+      azure_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+
+  apply-dev:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/reusable-terraform.yml
+    with:
+      tf_working_dir: terraform/environments/dev/cicd
+      environment: dev
+      plan_only: false
+    secrets:
+      azure_client_id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
+      azure_tenant_id: ${{ secrets.AZURE_TENANT_ID_DEV }}
+      azure_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
