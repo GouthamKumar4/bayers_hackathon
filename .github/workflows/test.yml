@@ -47,9 +47,7 @@ jobs:
       - name: Terraform Plan
         working-directory: terraform
         run: |
-          terraform plan \
-            -var="resource_group_name=rg-dev-microservices" \
-            -var="environment=dev"
+          terraform plan
 
       - name: Terraform Apply
         working-directory: terraform
