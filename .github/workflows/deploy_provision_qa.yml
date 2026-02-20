@@ -1,4 +1,4 @@
-name: Terraform CD - Azure East US
+name: Terraform test
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: terra
+        working-directory: terraform/environments/qa
 
     env:
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -37,23 +37,19 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        working-directory: terraform
+        working-directory: terraform/environments/qa
         run: terraform init
 
       - name: Terraform Validate
-        working-directory: terraform
+        working-directory: terraform/environments/qa
         run: terraform validate
 
       - name: Terraform Plan
-        working-directory: terraform
+        working-directory: terraform/environments/qa
         run: |
-          terraform plan \
-            -var="resource_group_name=rg-dev-microservices" \
-            -var="environment=dev"
+          terraform plan
 
       - name: Terraform Apply
-        working-directory: terraform
+        working-directory: terraform/environments/qa
         run: |
-          terraform apply -auto-approve \
-            -var="resource_group_name=rg-dev-microservices" \
-            -var="environment=dev"
+          terraform apply -auto-approve

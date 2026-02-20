@@ -1,8 +1,0 @@
-
-resource_group_name = "rg-dev"
-vnet_name           = "vnet-dev"
-subnet_name         = "subnet-aks"
-acr_name            = "acrdev"
-aks_name            = "aks-dev"
-log_workspace_name  = "log-dev"
-tm_name             = "tm-dev"
