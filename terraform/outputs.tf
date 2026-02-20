@@ -22,6 +22,3 @@ output "log_analytics_workspace_id" {
   value = module.log_analytics.workspace_id
 }
 
-output "traffic_manager_fqdn" {
-  value = module.traffic_manager.fqdn
-}
