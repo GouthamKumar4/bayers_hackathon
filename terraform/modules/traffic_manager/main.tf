@@ -15,10 +15,9 @@ resource "azurerm_traffic_manager_profile" "tm" {
   }
 }
 
-resource "azurerm_traffic_manager_endpoint" "endpoint" {
-  name       = "aks-endpoint"
+resource "azurerm_traffic_manager_external_endpoint" "endpoint" {
+  name   = "aks-endpoint"
   profile_id = azurerm_traffic_manager_profile.tm.id
-  type       = "externalEndpoints"
-  target     = var.target_dns
-  priority   = 1
+  target = var.target_dns
+  priority = 1
 }
