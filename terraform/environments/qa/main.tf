@@ -19,13 +19,13 @@ provider "azurerm" {
 }
 
 module "rg" {
-  source   = "./modules/resource_group"
+  source   = "GouthamKumar4/bayers_hackathon/terraform/modulesresource_group"
   name     = var.resource_group_name
   location = var.location
 }
 
 module "vnet" {
-  source              = "./modules/vnet"
+  source              = "GouthamKumar4/bayers_hackathon/terraform/modulesvnet"
   resource_group_name = module.rg.name
   location            = module.rg.location
   vnet_name           = var.vnet_name
@@ -33,21 +33,21 @@ module "vnet" {
 }
 
 module "log_analytics" {
-  source              = "./modules/log_analytics"
+  source              = "GouthamKumar4/bayers_hackathon/terraform/moduleslog_analytics"
   resource_group_name = module.rg.name
   location            = module.rg.location
   workspace_name      = var.log_workspace_name
 }
 
 module "acr" {
-  source              = "./modules/acr"
+  source              = "GouthamKumar4/bayers_hackathon/terraform/modulesacr"
   resource_group_name = module.rg.name
   location            = module.rg.location
   acr_name            = var.acr_name
 }
 
 module "aks" {
-  source              = "./modules/aks"
+  source              = "GouthamKumar4/bayers_hackathon/terraform/modulesaks"
   resource_group_name = module.rg.name
   location            = module.rg.location
   cluster_name        = var.aks_name
