@@ -1,0 +1,7 @@
+resource_group_name = "rg-qa"
+vnet_name           = "vnet-qa"
+subnet_name         = "subnet-aks"
+acr_name            = "acrqa"
+aks_name            = "aks-qa"
+log_workspace_name  = "log-qa"
+tm_name             = "tm-qa"

@@ -1,0 +1,7 @@
+resource_group_name = "rg-prod"
+vnet_name           = "vnet-prod"
+subnet_name         = "subnet-aks"
+acr_name            = "acrprod"
+aks_name            = "aks-prod"
+log_workspace_name  = "log-prod"
+tm_name             = "tm-prod"
