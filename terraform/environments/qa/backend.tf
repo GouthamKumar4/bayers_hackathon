@@ -3,6 +3,6 @@ terraform {
     resource_group_name  = "rg-dev-microservices"
     storage_account_name = "terraformstatefilelock"
     container_name       = "statefile"
-    key                  = "dev/terraform.tfstate"
+    key                  = "qa/terraform.tfstate"
   }
 }
