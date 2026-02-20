@@ -55,10 +55,3 @@ module "aks" {
   log_workspace_id    = module.log_analytics.workspace_id
   acr_id              = module.acr.acr_id
 }
-
-module "traffic_manager" {
-  source              = "./modules/traffic_manager"
-  resource_group_name = module.rg.name
-  tm_name             = var.tm_name
-  target_dns          = module.aks.aks_fqdn
-}
