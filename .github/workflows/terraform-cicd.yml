@@ -1,40 +1,56 @@
-name: terraform-cicd
+name: Terraform CD - Azure East US
 
 on:
-  pull_request:
-    paths:
-      - "terraform/**"
-      - ".github/workflows/terraform-cicd.yml"
-      - ".github/workflows/reusable-terraform.yml"
   push:
     branches:
       - main
-    paths:
-      - "terraform/**"
-      - ".github/workflows/terraform-cicd.yml"
-      - ".github/workflows/reusable-terraform.yml"
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
-  pr-plan-dev:
-    if: github.event_name == 'pull_request'
-    uses: ./.github/workflows/reusable-terraform.yml
-    with:
-      tf_working_dir: terraform/environments/dev/cicd
-      environment: dev
-      plan_only: true
-    secrets:
-      azure_client_id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
-      azure_tenant_id: ${{ secrets.AZURE_TENANT_ID_DEV }}
-      azure_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+  terraform:
+    runs-on: ubuntu-latest
 
-  apply-dev:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/reusable-terraform.yml
-    with:
-      tf_working_dir: terraform/environments/dev/cicd
-      environment: dev
-      plan_only: false
-    secrets:
-      azure_client_id: ${{ secrets.AZURE_CLIENT_ID_DEV }}
-      azure_tenant_id: ${{ secrets.AZURE_TENANT_ID_DEV }}
-      azure_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_USE_OIDC: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC + Managed Identity)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        working-directory: terraform
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: terraform
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: terraform
+        run: |
+          terraform plan \
+            -var="resource_group_name=rg-dev-microservices" \
+            -var="environment=dev"
+
+      - name: Terraform Apply
+        working-directory: terraform
+        run: |
+          terraform apply -auto-approve \
+            -var="resource_group_name=rg-dev-microservices" \
+            -var="environment=dev"
