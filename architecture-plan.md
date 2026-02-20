@@ -50,7 +50,7 @@
 - Azure subscription with permissions for networking, AKS, ACR, DNS, monitoring, and IAM.
 - Terraform >= 1.5 and AzureRM provider.
 - Docker and kubectl.
-- GitHub Actions with OIDC federation to Azure.
+- GitHub Actions with OIDC federation to Azure using a user-assigned managed identity.
 - Container registry (Azure Container Registry).
 
 ---
