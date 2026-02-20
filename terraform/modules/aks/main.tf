@@ -24,9 +24,3 @@ resource "azurerm_kubernetes_cluster" "aks" {
     log_analytics_workspace_id = var.log_workspace_id
   }
 }
-
-resource "azurerm_role_assignment" "acr_attach" {
-  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
-  role_definition_name = "AcrPull"
-  scope                = var.acr_id
-}
