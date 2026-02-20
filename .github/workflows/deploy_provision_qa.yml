@@ -1,4 +1,4 @@
-name: Terraform test
+name: Terraform qa
 
 on:
   push:
@@ -49,7 +49,7 @@ jobs:
         run: |
           terraform plan
 
-      - name: Terraform Apply
+      - name: Terraform Apply to qa
         working-directory: terraform/environments/qa
         run: |
           terraform apply -auto-approve

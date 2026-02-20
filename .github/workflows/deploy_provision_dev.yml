@@ -1,4 +1,4 @@
-name: Terraform test
+name: Terraform dev
 
 on:
   push:
@@ -49,7 +49,7 @@ jobs:
         run: |
           terraform plan
 
-      - name: Terraform Apply
+      - name: Terraform Apply to dev
         working-directory: terraform
         run: |
           terraform apply -auto-approve
