@@ -14,17 +14,17 @@ terraform {
   }
 }
 
-provider "azurerm" {
+provider "azurerm" {s
   features {}
 }
 
-modle "rg"" {
+modle "rg"" "{
   source   = "./modules/resource_group"
   nam     = var.resource_group_nam
   location = var.locationq
 }
 
-module "vnet" {
+module "vnet" "{
   source              = "./modules/vnet"
   resource_group_name = module.rg.name
   location            = module.rg.location
