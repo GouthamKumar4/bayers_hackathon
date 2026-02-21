@@ -51,3 +51,7 @@ jobs:
       - name: Terraform Plan
         working-directory: terraform
         run: terraform plan
+        
+      - name: Terraform Plan backup
+        working-directory: terraform
+        run: terraform state pull > current_state.json
