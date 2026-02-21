@@ -72,4 +72,6 @@ See `.github/workflows/app-cd-example.yml` for a working template.
 - Version modules via tags and consume with git source URLs.
 - Stronger control and release process, but slightly slower iteration.
 
+https://aws.plainenglish.io/our-terraform-state-got-corrupted-infrastructure-was-unmanageable-ce0ea6fbef41
+
 Recommended path now: keep module in-repo until multiple repositories need the same module, then promote to a dedicated module repository.
