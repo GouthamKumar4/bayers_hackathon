@@ -4,12 +4,12 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.80"
+      version = "~> 3.80",
     }
 
     random = {
       source  = "hashicorp/random"
-      version = "~> 3.6"
+      version = "~> 3.6",
     }
   }
 }
@@ -18,10 +18,10 @@ provider "azurerm" {
   features {}
 }
 
-modle "rg"" {
+module "rg" {
   source   = "./modules/resource_group"
-  nam     = var.resource_group_nam
-  location = var.locationq
+  name     = var.resource_group_name
+  location = var.location
 }
 
 module "vnet" {
