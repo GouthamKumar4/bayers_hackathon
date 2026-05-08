@@ -1,6 +1,6 @@
-# bayers_hackathon
+# Terraform_Azure_Handson
 
-This repository contains planning artifacts and reusable IaC/CI-CD templates for the healthcare microservices hackathon architecture.
+This repository contains planning artifacts and reusable IaC/CI-CD templates for the healthcare microservices architecture.
 
 ## Repository layout
 
